@@ -1,0 +1,95 @@
+
+{{!-- Header --}}
+<div class="container-fluid">
+    <div class="row jumbotron text-center">
+        <div class="col-12">
+            <h1>Everlist</h1>
+            <h3>Make & Update SQL Lists</h3>            
+        </div>
+    
+        {{!-- Post Items --}}
+        <form class="col-12">
+            <div class="row form-group justify-content-center">
+                <input class="col-md-8 col-12 form-control" id="new-item" placeholder="Add New List Item Here">
+                <button class="col-md-2 col-12 btn new" id="post-item">Post New Item</button> 
+            </div>
+        </form>
+
+        {{!-- Update Items --}}
+        <form class="container-fluid">
+            <div class="row justify-content-center">
+                <input class="col-md-6 col-12 form-control" id="update-item" placeholder="Enter Updated List Text">
+                <select class="col-md-2 col-12 form-control" id="pick-id">
+                    {{#each list}}
+                        <option data-id="{{this.id}}">Lits Item: {{this.id}}</option>
+                    {{/each}}
+                </select>
+                <button class="col-md-2 col-12 btn update" id="update-btn">Update Item</button>
+            </div> 
+        </form>
+        
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        {{#each list}}
+            <h4 class="col-md-8 col-12 list-items my-2" data-id="List Item {{this.id}}">{{this.id}}: {{this.list_item}}</h4>
+            <button class="col-md-2 col-12 btn delete my-2" data-id="{{this.id}}">Delete Item</button>
+        {{/each}}
+    </div>
+</div>
+
+
+<script>
+
+    {{!-- Post New Item --}}
+    $("#post-item").on("click", function(event){
+        event.preventDefault();
+        var newItem = {newItem: $("#new-item").val().trim()};
+        console.log(newItem);
+
+        $.ajax({
+            url: "/update",
+            type: "POST",
+            data: newItem
+        }).then(function(){
+            console.log("Added: ", newItem)
+            location.reload();
+        });
+    });
+
+    {{!-- Update Item --}}
+    $("#update-btn").on("click", function(event){
+        event.preventDefault();
+        id = $("#pick-id").find(":selected").attr("data-id");
+        updateItem = {updateItem: $("#update-item").val().trim()};
+        console.log(id, updateItem);
+
+        $.ajax({
+            url: "/update/"+id,
+            type: "PUT",
+            data: updateItem
+        }).then(function(){
+            console.log("Updated " + id + " To " + updateItem);
+            location.reload();
+        });
+    });
+    
+    {{!-- Delete List Items --}}
+    $(".delete").on("click", function(event){
+        console.log("this clicked");
+        event.preventDefault();
+        var id = $(this).attr("data-id");
+        console.log(id); 
+
+        $.ajax({
+            url: "/update/"+id, 
+            type: "DELETE"}
+        ).then(function(){
+            console.log("Deleted: ", id);
+            location.reload();    
+        });
+    });
+
+</script>
