@@ -1,0 +1,7 @@
+.jumbotron{
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#003747), color-stop(50%, #0c777d), color-stop(94%, #031622));
+    background-image: -webkit-linear-gradient(top, #003747 0%, #0c777d 50%, #031622 94%);
+    background-image: linear-gradient(to bottom, #003747 0%, #0c777d 50%, #031622 94%);
+    color: #ffffff;
+}
+
